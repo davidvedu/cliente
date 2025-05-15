@@ -1,0 +1,161 @@
+<div class="min-h-screen flex flex-col bg-gray-50">
+  <app-nav></app-nav>
+
+  <!-- Hero Section con gradiente mejorado -->
+  <section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-24">
+    <div class="container mx-auto px-6 text-center">
+      <h1 class="text-5xl font-bold mb-6 text-shadow">Tu Próximo Coche te Espera</h1>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">Descubre una amplia selección de vehículos de confianza.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button (click)="irRuta('/anuncios')" class="bg-white text-blue-600 font-semibold py-3 px-8 rounded-full hover:bg-blue-900 hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105">Explorar Vehículos</button>
+        <button (click)="irRuta('/publicar')" class="bg-blue-900 text-white font-semibold py-3 px-8 rounded-full hover:bg-white hover:text-blue-900 transition-all duration-300 transform hover:scale-105 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Vender mi Coche
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coches Más Buscados con diseño mejorado -->
+  <section class="bg-white py-16 shadow-sm">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-semibold text-gray-800 text-center mb-2">Coches Más Buscados</h2>
+      <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">Las marcas preferidas por nuestros usuarios</p>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div *ngFor="let marca of marcasPopulares" class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition duration-300 cursor-pointer transform hover:-translate-y-1 border border-gray-100" (click)="buscarPorMarca(marca.nombre)">
+          <div class="h-20 flex items-center justify-center mb-4">
+            <img [src]="marca.logo" [alt]="marca.nombre" class="h-16 mx-auto">
+          </div>
+          <p class="font-medium text-gray-800 text-lg">{{ marca.nombre }}</p>
+          <p class="text-sm text-blue-600 mt-1">{{ marca.busquedas }} búsquedas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Novedades con tarjetas mejoradas -->
+  <section class="bg-gray-50 py-16">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-semibold text-gray-800 text-center mb-2">Novedades de FastCarTrade</h2>
+      <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">Descubre las últimas mejoras en nuestra plataforma</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1">
+          <div class="h-4 bg-blue-600"></div>
+          <div class="p-8">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Nueva App Móvil</h3>
+            <p class="text-gray-600 mb-6">Descarga nuestra nueva aplicación móvil y lleva todos los anuncios en tu bolsillo. Disponible para iOS y Android.</p>
+            <button class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+              Saber más
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1">
+          <div class="h-4 bg-green-500"></div>
+          <div class="p-8">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Verificación de Vehículos</h3>
+            <p class="text-gray-600 mb-6">Ahora ofrecemos servicio de verificación de vehículos para mayor seguridad en tus compras.</p>
+            <button class="text-green-500 hover:text-green-700 font-medium flex items-center">
+              Conocer detalles
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1">
+          <div class="h-4 bg-indigo-500"></div>
+          <div class="p-8">
+            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Financiación Instantánea</h3>
+            <p class="text-gray-600 mb-6">Nuevo servicio de financiación con aprobación instantánea para facilitar la compra de tu vehículo.</p>
+            <button class="text-indigo-500 hover:text-indigo-700 font-medium flex items-center">
+              Ver opciones
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre Nosotros con diseño mejorado -->
+  <section class="bg-white py-20 shadow-sm">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 lg:pr-12 mb-10 lg:mb-0">
+          <h2 class="text-3xl font-semibold text-gray-800 mb-6">Sobre Nosotros</h2>
+          <p class="text-gray-600 mb-6 text-lg leading-relaxed">En FastCarTrade, conectamos compradores y vendedores para que encuentren el vehículo ideal de manera rápida, segura y confiable. Con miles de vehículos disponibles y una comunidad en crecimiento, somos tu mejor opción para encontrar el coche perfecto.</p>
+          <div class="flex flex-wrap gap-8 mt-8">
+            <div class="text-center">
+              <p class="text-3xl font-bold text-blue-600">{{ totalVehiculos }}</p>
+              <p class="text-gray-600">Vehículos</p>
+            </div>
+            <div class="text-center">
+              <p class="text-3xl font-bold text-blue-600">{{ totalUsuarios }}</p>
+              <p class="text-gray-600">Usuarios</p>
+            </div>
+            <div class="text-center">
+              <p class="text-3xl font-bold text-blue-600">24/7</p>
+              <p class="text-gray-600">Soporte</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-1/2">
+          <img src="/assets/about-us.jpg" alt="Sobre Nosotros" class="w-full rounded-xl shadow-lg">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coches Destacados con diseño mejorado -->
+  <section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-semibold text-gray-800 text-center mb-2">Nuestros Destacados</h2>
+      <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">Vehículos seleccionados por nuestro equipo</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let coche of cochesDestacados" class="bg-white rounded-xl shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1">
+          <div class="relative">
+            <img [src]="coche.imagenUrl" [alt]="coche.titulo" class="w-full h-56 object-cover">
+            <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">Destacado</div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ coche.titulo }}</h3>
+            <p class="text-gray-600 text-sm mb-6">{{ coche.descripcion }}</p>
+            <button (click)="irRuta('/anuncio/' + coche.id)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300">Ver Detalles</button>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-10">
+        <button (click)="irRuta('/anuncios')" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold text-lg">
+          Ver Todos los Anuncios
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</div>

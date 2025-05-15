@@ -1,0 +1,108 @@
+/* Estilos para la página de anuncios */
+
+/* Animaciones para las tarjetas de anuncios */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  :host {
+    display: block;
+  }
+  
+  /* Aplicar animación a las tarjetas */
+  .grid > div {
+    animation: fadeIn 0.3s ease-out forwards;
+    animation-delay: calc(var(--index) * 0.05s);
+    opacity: 0;
+  }
+  
+  /* Estilos para truncar texto */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Mejoras para los inputs de filtros */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  /* Efecto hover para las tarjetas */
+  .grid > div:hover {
+    .hover-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+  
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+  
+    .card-img-top {
+      transition: opacity 0.3s ease;
+    }
+  
+    .hover-card:hover .card-img-top {
+      opacity: 0.9;
+    }
+  
+    .badge {
+      font-size: 0.8rem;
+      padding: 0.5em 0.7em;
+    }
+  }
+  
+  /* Estilo para las imágenes al hacer hover */
+  .grid > div:hover img {
+    transform: scale(1.05);
+    transition: transform 0.5s ease;
+  }
+  
+  /* Transición suave para las imágenes */
+  .grid img {
+    transition: transform 0.3s ease;
+  }
+  
+  /* Estilo para los inputs de filtro */
+  input[type="number"], select {
+    transition: all 0.2s ease;
+  }
+  
+  input[type="number"]:focus, select:focus {
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.2);
+  }
+  
+  /* Estilo para los checkboxes */
+  input[type="checkbox"] {
+    accent-color: #1e3a8a;
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Estilo para los botones de paginación */
+  .pagination a {
+    transition: all 0.2s ease;
+  }
+  
+  /* Estilo para el gradiente del banner */
+  .bg-gradient-to-r {
+    background-size: 200% 200%;
+    animation: gradientAnimation 10s ease infinite;
+  }
+  
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }

@@ -1,0 +1,87 @@
+<app-nav></app-nav>
+
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-blue-900">Mis Favoritos</h1>
+
+  <!-- Loading -->
+  <div *ngIf="cargando" class="text-center my-12">
+    <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-900 border-t-transparent"></div>
+    <p class="mt-2 text-gray-600">Cargando favoritos...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!cargando && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ error }}
+  </div>
+
+  <!-- Sin favoritos -->
+  <div *ngIf="!cargando && !error && favoritos.length === 0" class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
+    No tienes vehículos guardados en favoritos. Explora nuestros <a routerLink="/anuncios" class="underline font-semibold">anuncios</a> y guarda los que te interesen.
+  </div>
+
+  <!-- Lista de favoritos -->
+  <div *ngIf="!cargando && favoritos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let favorito of favoritos" class="bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- Imagen del vehículo -->
+      <div class="relative">
+        <img 
+          [src]="favorito.anuncio.imagen_principal" 
+          [alt]="favorito.anuncio.titulo"
+          class="w-full h-48 object-cover"
+          (error)="handleImageError($event)"
+        />
+        <div class="absolute bottom-0 left-0 bg-blue-600 text-white px-3 py-1 text-sm font-semibold">
+          {{ formatearPrecio(favorito.anuncio.precio) }}
+        </div>
+        <button 
+          (click)="eliminarFavorito(favorito.id)" 
+          class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2"
+          title="Eliminar de favoritos"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Información del vehículo -->
+      <div class="p-4">
+        <h3 class="text-lg font-semibold mb-2 truncate">{{ favorito.anuncio.titulo }}</h3>
+        
+        <div class="flex flex-wrap gap-2 text-sm text-gray-600 mb-3">
+          <span class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {{ favorito.anuncio.anio }}
+          </span>
+          <span class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            {{ favorito.anuncio.combustible }}
+          </span>
+          <span class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            {{ favorito.anuncio.kilometros.toLocaleString('es-ES') }} km
+          </span>
+        </div>
+        
+        <div class="text-sm text-gray-500 mb-3">
+          Añadido el {{ formatearFecha(favorito.fecha_agregado) }}
+        </div>
+        
+        <button 
+          (click)="verDetalle(favorito.anuncio.id)" 
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition duration-300"
+        >
+          Ver detalles
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

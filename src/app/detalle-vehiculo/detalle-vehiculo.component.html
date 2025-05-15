@@ -1,0 +1,251 @@
+<app-nav></app-nav>
+
+<div class="container mx-auto px-4 py-8" *ngIf="anuncio">
+  <!-- Navegación de migas de pan -->
+  <div class="text-sm text-gray-600 mb-6">
+    <a routerLink="/" class="hover:underline">Inicio</a> &gt; 
+    <a routerLink="/anuncios" class="hover:underline">Anuncios</a> &gt; 
+    <span class="text-gray-800">{{ anuncio.titulo }}</span>
+  </div>
+
+  <!-- Galería de imágenes -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="space-y-4">
+      <div class="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
+        <img [src]="anuncio.imagenes[imagenActual]" [alt]="anuncio.titulo" class="w-full h-full object-cover">
+        <button (click)="anteriorImagen()" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button (click)="siguienteImagen()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <button *ngFor="let imagen of anuncio.imagenes; let i = index" 
+                (click)="cambiarImagen(i)"
+                class="h-20 bg-gray-100 rounded overflow-hidden">
+          <img [src]="imagen" [alt]="anuncio.titulo + ' miniatura ' + (i + 1)" class="w-full h-full object-cover">
+        </button>
+      </div>
+    </div>
+
+    <!-- Información principal -->
+    <div class="space-y-6">
+      <div>
+        <h1 class="text-3xl font-bold">{{ anuncio.titulo }}</h1>
+        <p class="text-2xl font-semibold text-blue-600 mt-2">{{ formatearPrecio(anuncio.precio) }}</p>
+      </div>
+
+      <!-- Características principales -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Kilómetros</p>
+          <p class="font-semibold">{{ anuncio.kilometros.toLocaleString('es-ES') }} km</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Año</p>
+          <p class="font-semibold">{{ anuncio.anio }}</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Combustible</p>
+          <p class="font-semibold">{{ anuncio.combustible }}</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-sm text-gray-500">Cambio</p>
+          <p class="font-semibold">{{ anuncio.cambio }}</p>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="flex space-x-4">
+        <button (click)="toggleContacto()" class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition">
+          Contactar con el vendedor
+        </button>
+        <button *ngIf="anuncio.financiacion" 
+                (click)="toggleFinanciacion()"
+                class="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">
+          Ver financiación
+        </button>
+      </div>
+
+      <!-- Información del vendedor -->
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="flex items-center space-x-4">
+          <img [src]="anuncio.vendedor.foto" [alt]="anuncio.vendedor.nombre" class="w-12 h-12 rounded-full">
+          <div>
+            <p class="font-semibold">{{ anuncio.vendedor.nombre }}</p>
+            <div class="flex items-center">
+              <span class="text-yellow-400">★</span>
+              <span class="ml-1">{{ anuncio.vendedor.valoracion }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalles del vehículo -->
+  <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Características técnicas -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-semibold">Características técnicas</h2>
+      <div class="space-y-4">
+        <div class="flex justify-between">
+          <span class="text-gray-600">Potencia</span>
+          <span class="font-semibold">{{ anuncio.potencia }} CV</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Cilindrada</span>
+          <span class="font-semibold">{{ anuncio.cilindrada }} cc</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Puertas</span>
+          <span class="font-semibold">{{ anuncio.puertas }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Plazas</span>
+          <span class="font-semibold">{{ anuncio.plazas }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Color</span>
+          <span class="font-semibold">{{ anuncio.color }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consumo y emisiones -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-semibold">Consumo y emisiones</h2>
+      <div class="space-y-4">
+        <div class="flex justify-between">
+          <span class="text-gray-600">Consumo urbano</span>
+          <span class="font-semibold">{{ anuncio.consumo.urbano }} l/100km</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Consumo extraurbano</span>
+          <span class="font-semibold">{{ anuncio.consumo.extraurbano }} l/100km</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Consumo mixto</span>
+          <span class="font-semibold">{{ anuncio.consumo.mixto }} l/100km</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Emisiones CO₂</span>
+          <span class="font-semibold">{{ anuncio.emisiones }} g/km</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documentación y garantía -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-semibold">Documentación y garantía</h2>
+      <div class="space-y-4">
+        <div class="flex justify-between">
+          <span class="text-gray-600">ITV</span>
+          <span class="font-semibold">{{ formatearFecha(anuncio.itv) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Seguro</span>
+          <span class="font-semibold">{{ anuncio.seguro.tipo }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Vence seguro</span>
+          <span class="font-semibold">{{ formatearFecha(anuncio.seguro.vence) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Garantía</span>
+          <span class="font-semibold" [class.text-green-600]="anuncio.garantia" [class.text-red-600]="!anuncio.garantia">
+            {{ anuncio.garantia ? 'Sí' : 'No' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Equipamiento -->
+  <div class="mt-12">
+    <h2 class="text-xl font-semibold mb-4">Equipamiento</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div *ngFor="let item of anuncio.equipamiento" class="bg-gray-50 p-3 rounded-lg">
+        <p class="text-sm">{{ item }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Descripción -->
+  <div class="mt-12">
+    <h2 class="text-xl font-semibold mb-4">Descripción</h2>
+    <p class="text-gray-700 whitespace-pre-line">{{ anuncio.descripcion }}</p>
+  </div>
+
+  <!-- Modal de financiación -->
+  <div *ngIf="mostrarFinanciacion" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h3 class="text-xl font-semibold mb-4">Opciones de financiación</h3>
+      <div class="space-y-4">
+        <div class="flex justify-between">
+          <span>Precio total financiado</span>
+          <span class="font-semibold">{{ formatearPrecio(anuncio.precioFinanciado) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Cuota mensual</span>
+          <span class="font-semibold">{{ formatearPrecio(anuncio.cuotaMensual) }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Plazo</span>
+          <span class="font-semibold">60 meses</span>
+        </div>
+      </div>
+      <button (click)="toggleFinanciacion()" class="mt-6 w-full bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de contacto -->
+  <div *ngIf="mostrarContacto" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h3 class="text-xl font-semibold mb-4">Contactar con el vendedor</h3>
+      <form class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nombre</label>
+          <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+          <input type="tel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Mensaje</label>
+          <textarea rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+        </div>
+        <div class="flex space-x-4">
+          <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
+            Enviar mensaje
+          </button>
+          <button (click)="toggleContacto()" type="button" class="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container mx-auto px-4 py-16 text-center" *ngIf="!anuncio">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4">Anuncio no encontrado</h2>
+  <p class="text-gray-600 mb-8">El anuncio que estás buscando no existe o ha sido eliminado.</p>
+  <a routerLink="/anuncios" class="bg-blue-900 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition">
+    Volver a anuncios
+  </a>
+</div>
+
+<app-footer></app-footer>

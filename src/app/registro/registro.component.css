@@ -1,0 +1,19 @@
+.registro-container {
+  min-height: 100vh;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.form-container {
+  max-width: 28rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Estilos adicionales para mejorar la apariencia en dispositivos móviles */
+@media (max-width: 640px) {
+  .form-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

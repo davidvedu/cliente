@@ -1,0 +1,207 @@
+<nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <!-- Logo y navegación principal -->
+      <div class="flex">
+        <div class="flex-shrink-0 flex items-center">
+          <a routerLink="/" class="flex items-center">
+            <img src="/assets/images/logo.png" alt="FastCarTrade Logo" class="h-10 w-auto mr-2">
+            <span class="text-2xl font-bold text-blue-900">FastCarTrade</span>
+          </a>
+        </div>
+
+        <!-- Enlaces de navegación para pantallas medianas y grandes -->
+        <div class="hidden md:ml-6 md:flex md:space-x-8">
+          <a routerLink="/" 
+             routerLinkActive="border-blue-900 text-gray-900"
+             [routerLinkActiveOptions]="{exact: true}"
+             class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+            Inicio
+          </a>
+          
+          <!-- Enlaces para todos los usuarios -->
+          <a routerLink="/anuncios" 
+             routerLinkActive="border-blue-900 text-gray-900"
+             class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+            Anuncios
+          </a>
+          
+          <!-- Enlaces específicos para vendedores -->
+          <ng-container *ngIf="usuarioActual && rolActual === 'vendedor'">
+            <a routerLink="/publicar" 
+               routerLinkActive="border-blue-900 text-gray-900"
+               class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+              Publicar
+            </a>
+            <a routerLink="/mis-anuncios" 
+               routerLinkActive="border-blue-900 text-gray-900"
+               class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+              Mis Anuncios
+            </a>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Botones de autenticación para pantallas medianas y grandes -->
+      <div class="hidden md:flex md:items-center md:space-x-4">
+        <!-- Si el usuario NO está autenticado -->
+        <ng-container *ngIf="!usuarioActual">
+          <a routerLink="/login" 
+             class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            Iniciar sesión
+          </a>
+          <a routerLink="/registro" 
+             class="bg-blue-900 text-white hover:bg-blue-800 px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+            Registrarse
+          </a>
+        </ng-container>
+
+        <!-- Si el usuario ESTÁ autenticado -->
+        <ng-container *ngIf="usuarioActual">
+          <!-- Enlaces específicos para compradores -->
+          <ng-container *ngIf="rolActual === 'comprador'">
+            <a routerLink="/favoritos" 
+               class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+              Favoritos
+            </a>
+          </ng-container>
+          
+          <a routerLink="/mensajes" 
+             class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            Mensajes
+          </a>
+          
+          <!-- Indicador de rol actual -->
+          <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+            {{ rolActual === 'comprador' ? 'Comprador' : 'Vendedor' }}
+          </span>
+          
+          <button (click)="cambiarRol()" 
+                  class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            Cambiar a {{ rolActual === 'comprador' ? 'vendedor' : 'comprador' }}
+          </button>
+          <a routerLink="/perfil" 
+          class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9.964 9.964 0 0112 15c2.21 0 4.253.716 5.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+         </svg>
+        </a>
+       
+          <button (click)="cerrarSesion()"
+                  class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            Cerrar sesión
+          </button>
+        </ng-container>
+      </div>
+
+      <!-- Botón de menú móvil -->
+      <div class="flex items-center md:hidden">
+        <button (click)="toggleMenu()"
+                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+          <svg class="h-6 w-6" [class.hidden]="menuAbierto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg class="h-6 w-6" [class.hidden]="!menuAbierto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div class="md:hidden" [class.hidden]="!menuAbierto">
+      <div class="pt-2 pb-3 space-y-1">
+        <a routerLink="/" 
+           routerLinkActive="bg-blue-50 border-blue-900 text-blue-900"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700">
+          Inicio
+        </a>
+        <a routerLink="/anuncios" 
+           routerLinkActive="bg-blue-50 border-blue-900 text-blue-900"
+           class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700">
+          Anuncios
+        </a>
+        
+        <!-- Enlaces específicos para vendedores (móvil) -->
+        <ng-container *ngIf="usuarioActual && rolActual === 'vendedor'">
+          <a routerLink="/publicar" 
+             routerLinkActive="bg-blue-50 border-blue-900 text-blue-900"
+             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700">
+            Publicar
+          </a>
+          <a routerLink="/mis-anuncios" 
+             routerLinkActive="bg-blue-50 border-blue-900 text-blue-900"
+             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700">
+            Mis Anuncios
+          </a>
+        </ng-container>
+      </div>
+      <div class="pt-4 pb-3 border-t border-gray-200">
+        <div class="space-y-1">
+          <!-- Si el usuario NO está autenticado (móvil) -->
+          <ng-container *ngIf="!usuarioActual">
+            <a routerLink="/login" 
+               class="block pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+              Iniciar sesión
+            </a>
+            <a routerLink="/registro" 
+               class="block pl-3 pr-4 py-2 text-base font-medium text-blue-900 hover:text-blue-800 hover:bg-gray-50">
+              Registrarse
+            </a>
+          </ng-container>
+
+          <!-- Si el usuario ESTÁ autenticado (móvil) -->
+          <ng-container *ngIf="usuarioActual">
+            <div class="px-3 py-2 text-base font-medium text-gray-700">
+              Hola, {{ usuarioActual.nombre }}
+            </div>
+            
+            <!-- Indicador de rol actual (móvil) -->
+            <div class="px-3 py-2 text-sm font-medium">
+              <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                {{ rolActual === 'comprador' ? 'Comprador' : 'Vendedor' }}
+              </span>
+            </div>
+            
+            <!-- Enlaces específicos para compradores (móvil) -->
+            <ng-container *ngIf="rolActual === 'comprador'">
+              <a routerLink="/favoritos" 
+                 class="block pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+                Favoritos
+              </a>
+            </ng-container>
+            
+            <!-- Enlaces específicos para vendedores (móvil) -->
+            <ng-container *ngIf="rolActual === 'vendedor'">
+              <a routerLink="/estadisticas" 
+                 class="block pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+                Estadísticas
+              </a>
+            </ng-container>
+            
+            <a routerLink="/mensajes" 
+               class="block pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+              Mensajes
+            </a>
+            <button (click)="cambiarRol()" 
+                    class="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+              Cambiar a {{ rolActual === 'comprador' ? 'vendedor' : 'comprador' }}
+            </button>
+            <a routerLink="/perfil" 
+               class="block pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+              <i class="fas fa-user-circle mr-1"></i> Perfil
+            </a>
+            <button (click)="cerrarSesion()"
+                    class="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50">
+              Cerrar sesión
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Espaciador para compensar el nav fijo -->
+<div class="h-16"></div>

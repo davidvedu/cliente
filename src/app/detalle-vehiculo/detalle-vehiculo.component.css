@@ -1,0 +1,147 @@
+/* Estilos generales */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Galería de imágenes */
+.relative {
+  position: relative;
+}
+
+.relative img {
+  transition: transform 0.3s ease;
+}
+
+.relative:hover img {
+  transform: scale(1.02);
+}
+
+/* Botones de navegación */
+.absolute button {
+  transition: background-color 0.3s ease;
+}
+
+.absolute button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Miniaturas */
+.grid-cols-4 button {
+  transition: transform 0.2s ease;
+}
+
+.grid-cols-4 button:hover {
+  transform: scale(1.05);
+}
+
+/* Características principales */
+.bg-gray-50 {
+  transition: background-color 0.3s ease;
+}
+
+.bg-gray-50:hover {
+  background-color: #f3f4f6;
+}
+
+/* Botones de acción */
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Modales */
+.fixed {
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Formulario de contacto */
+input, textarea {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .md\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.container {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Estilos para la galería de imágenes */
+.border-2.border-blue-600 {
+  box-shadow: 0 0 0 2px #2563eb;
+}
+
+/* Animación para cambio de imágenes */
+img {
+  transition: opacity 0.3s ease;
+}
+
+/* Estilos para los botones de navegación */
+button svg {
+  transition: transform 0.2s ease;
+}
+
+button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Estilos para las miniaturas */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f7fafc;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 3px;
+}
