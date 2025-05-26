@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavComponent } from '../nav/nav.component';
 import { FooterComponent } from '../footer/footer.component';
 import { FormsModule } from '@angular/forms';
@@ -76,7 +76,6 @@ export class DetalleVehiculoComponent implements OnInit, OnDestroy {
   enviandoMensaje: boolean = false;
   mensajeEnviado: boolean = false;
 
-  // Formulario de contacto
   contactoForm: ContactoForm = {
     nombre: '',
     email: '',
@@ -94,7 +93,7 @@ export class DetalleVehiculoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
-    if (!this.id) {
+    if (!this.id || isNaN(Number(this.id))) {
       this.error = 'ID de anuncio no válido';
       this.cargando = false;
       return;
@@ -110,82 +109,34 @@ export class DetalleVehiculoComponent implements OnInit, OnDestroy {
   cargarAnuncio(): void {
     this.cargando = true;
     this.error = null;
-
-    // En un caso real, aquí harías la petición al backend
-    // this.http.get<Anuncio>(`http://localhost:3000/api/anuncios/${this.id}`)
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.anuncio = data;
-    //       this.cargando = false;
-    //     },
-    //     error: (err) => {
-    //       this.error = 'Error al cargar el anuncio';
-    //       this.cargando = false;
-    //     }
-    //   });
-    
-    // Por ahora, usamos datos de ejemplo
-    this.cargarDatoEjemplo();
-  }
-
-  cargarDatoEjemplo(): void {
-    // Simulamos la carga de un anuncio específico
-    const anuncios = [
-      {
-        id: 1,
-        titulo: 'Audi A3 Sportback 2.0 TDI',
-        descripcion: 'Vehiculo en perfecto estado, unico dueno, libro de mantenimiento al dia, ITV recien pasada. Equipado con climatizador bizona, control de crucero, sensores de aparcamiento, navegador, bluetooth, llantas de aleacion, faros LED, etc. Revision recien hecha con cambio de aceite y filtros. Neumaticos en buen estado.',
-        precio: 15000,
-        kilometros: 120000,
-        anio: 2018,
-        marca: 'Audi',
-        modelo: 'A3 Sportback',
-        combustible: 'Diesel',
-        estado: 'Usado',
-        ubicacion: 'Madrid',
-        imagenes: ['assets/oferta1.webp', 'assets/coche1-2.jpg', 'assets/coche1-3.jpg'],
-        vendedor: {
-          id: 1,
-          nombre: 'Carlos Rodriguez',
-          valoracion: 4.8,
-          foto: 'assets/user1.jpg'
+  
+    // Agregar headers de autenticación si es necesario
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    }) : undefined;
+  
+    this.http.get<Anuncio>(`http://localhost:3000/api/anuncios/${this.id}`, { headers })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.anuncio = {
+            ...data,
+            fechaPublicacion: new Date(data.fechaPublicacion),
+            itv: new Date(data.itv),
+            seguro: {
+              ...data.seguro,
+              vence: new Date(data.seguro.vence)
+            }
+          };
+          this.cargando = false;
         },
-        fechaPublicacion: new Date('2023-12-15'),
-        potencia: 150,
-        cilindrada: 1968,
-        cambio: 'Manual',
-        puertas: 5,
-        plazas: 5,
-        color: 'Gris metalizado',
-        equipamiento: ['Climatizador', 'Navegador', 'Bluetooth', 'Sensores de aparcamiento', 'Faros LED', 'Llantas de aleación'],
-        garantia: true,
-        itv: new Date('2024-12-15'),
-        consumo: {
-          urbano: 5.2,
-          extraurbano: 3.8,
-          mixto: 4.3
-        },
-        emisiones: 114,
-        seguro: {
-          tipo: 'Todo riesgo',
-          vence: new Date('2024-06-15')
-        },
-        financiacion: true,
-        precioFinanciado: 16500,
-        cuotaMensual: 275
-      }
-    ];
-    
-    const anuncioEncontrado = anuncios.find(a => a.id === Number(this.id));
-    if (!anuncioEncontrado) {
-      this.error = 'Anuncio no encontrado';
-      this.cargando = false;
-      return;
-    }
-    
-    this.anuncio = anuncioEncontrado;
-    this.cargando = false;
+        error: (err) => {
+          console.error('Error al cargar anuncio:', err);
+          this.error = 'Error al cargar el anuncio. Puede que no exista o no tengas permisos para verlo.';
+          this.cargando = false;
+        }
+      });
   }
 
   cambiarImagen(indice: number): void {
@@ -271,35 +222,26 @@ export class DetalleVehiculoComponent implements OnInit, OnDestroy {
     this.enviandoMensaje = true;
     this.error = null;
 
-    // En un caso real, aquí enviarías el mensaje al backend
-    // this.http.post(`http://localhost:3000/api/mensajes`, {
-    //   anuncio_id: this.anuncio.id,
-    //   receptor_id: this.anuncio.vendedor.id,
-    //   contenido: this.contactoForm.mensaje,
-    //   nombre: this.contactoForm.nombre,
-    //   email: this.contactoForm.email,
-    //   telefono: this.contactoForm.telefono
-    // }).pipe(takeUntil(this.destroy$))
-    //   .subscribe({
-    //     next: () => {
-    //       this.mostrarContacto = false;
-    //       this.resetFormularioContacto();
-    //       this.mensajeEnviado = true;
-    //       this.enviandoMensaje = false;
-    //     },
-    //     error: (err) => {
-    //       this.error = 'Error al enviar el mensaje';
-    //       this.enviandoMensaje = false;
-    //     }
-    //   });
-
-    // Simulamos el envío exitoso
-    setTimeout(() => {
-      this.mostrarContacto = false;
-      this.resetFormularioContacto();
-      this.mensajeEnviado = true;
-      this.enviandoMensaje = false;
-    }, 1000);
+    this.http.post(`http://localhost:3000/api/mensajes`, {
+      anuncio_id: this.anuncio.id,
+      receptor_id: this.anuncio.vendedor.id,
+      contenido: this.contactoForm.mensaje,
+      nombre: this.contactoForm.nombre,
+      email: this.contactoForm.email,
+      telefono: this.contactoForm.telefono
+    }).pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.mostrarContacto = false;
+          this.resetFormularioContacto();
+          this.mensajeEnviado = true;
+          this.enviandoMensaje = false;
+        },
+        error: () => {
+          this.error = 'Error al enviar el mensaje';
+          this.enviandoMensaje = false;
+        }
+      });
   }
 
   calcularAntiguedad(): number {
@@ -334,9 +276,5 @@ export class DetalleVehiculoComponent implements OnInit, OnDestroy {
 
   formatearEmisiones(emisiones: number): string {
     return `${emisiones} g/km`;
-  }
-
-  volverAAnuncios(): void {
-    this.router.navigate(['/anuncios']);
   }
 }

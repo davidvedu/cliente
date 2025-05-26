@@ -1,107 +1,149 @@
-
 <div class="min-h-screen flex flex-col bg-gray-100 pt-16">
   <app-nav></app-nav>
 
-  <div class="min-h-screen flex flex-col bg-gray-100 pt-4">
-    <section class="bg-white py-8 px-6 shadow-md mt-2 mb-8">
-      <div class="container mx-auto">
-        <h2 class="text-3xl font-semibold text-blue-900 text-center mb-8">Publicar un Anuncio de Coche</h2>
+  <section class="bg-white py-8 px-6 shadow-md mt-2 mb-8 flex-grow">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-semibold text-blue-900 text-center mb-8">Publicar un Anuncio de Coche</h2>
 
-        <form [formGroup]="publicarForm" (ngSubmit)="onSubmit()" class="max-w-lg mx-auto space-y-6">
-          <div>
-            <label for="marca" class="block text-gray-700 text-sm font-bold mb-2">Marca:</label>
-            <select id="marca" formControlName="marca" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-              <option value="">Seleccionar Marca</option>
-              <option *ngFor="let marca of marcasDisponibles" [value]="marca">{{ marca }}</option>
-            </select>
-            <div *ngIf="publicarForm.controls['marca'].invalid && (publicarForm.controls['marca'].dirty || publicarForm.controls['marca'].touched)" class="text-red-500 text-xs italic mt-1">
-              <div *ngIf="publicarForm.controls['marca'].errors?.['required']">
-                La marca es requerida.
-              </div>
-            </div>
-          </div>
+      <form [formGroup]="publicarForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" class="max-w-lg mx-auto space-y-6">
 
-          <div>
-            <label for="modelo" class="block text-gray-700 text-sm font-bold mb-2">Modelo:</label>
-            <select id="modelo" formControlName="modelo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-              <option value="">Seleccionar Modelo</option>
-              <option *ngFor="let modelo of modelosDisponibles | keyvalue" [value]="modelo.key">{{ modelo.value }}</option>
-            </select>
-            <div *ngIf="publicarForm.controls['modelo'].invalid && (publicarForm.controls['modelo'].dirty || publicarForm.controls['modelo'].touched)" class="text-red-500 text-xs italic mt-1">
-              <div *ngIf="publicarForm.controls['modelo'].errors?.['required']">
-                El modelo es requerido.
-              </div>
-            </div>
+        <!-- Título -->
+        <div>
+          <label for="titulo" class="block text-gray-700 text-sm font-bold mb-2">Título:</label>
+          <input id="titulo" type="text" formControlName="titulo"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+            placeholder="Título del anuncio">
+          <div *ngIf="publicarForm.get('titulo')?.touched && publicarForm.get('titulo')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            El título es requerido.
           </div>
+        </div>
 
-          <div>
-            <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio (€):</label>
-            <input type="number" id="precio" formControlName="precio" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Precio de venta">
-            <div *ngIf="publicarForm.controls['precio'].invalid && (publicarForm.controls['precio'].dirty || publicarForm.controls['precio'].touched)" class="text-red-500 text-xs italic mt-1">
-              <div *ngIf="publicarForm.controls['precio'].errors?.['required']">
-                El precio es requerido.
-              </div>
-              <div *ngIf="publicarForm.controls['precio'].errors?.['min']">
-                El precio debe ser mayor que 0.
-              </div>
-            </div>
+        <!-- Matrícula -->
+        <div>
+          <label for="matricula" class="block text-gray-700 text-sm font-bold mb-2">Matrícula:</label>
+          <input id="matricula" type="text" formControlName="matricula"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+            placeholder="Ej: 1234-ABC">
+          <div *ngIf="publicarForm.get('matricula')?.touched && publicarForm.get('matricula')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            La matrícula es requerida.
           </div>
+        </div>
 
-          <div>
-            <label for="anio" class="block text-gray-700 text-sm font-bold mb-2">Año de Fabricación:</label>
-            <input type="number" id="anio" formControlName="anio" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Año de fabricación">
-            <div *ngIf="publicarForm.controls['anio'].invalid && (publicarForm.controls['anio'].dirty || publicarForm.controls['anio'].touched)" class="text-red-500 text-xs italic mt-1">
-              <div *ngIf="publicarForm.controls['anio'].errors?.['required']">
-                El año es requerido.
-              </div>
-              <div *ngIf="publicarForm.controls['anio'].errors?.['min']">
-                El año debe ser al menos 1900.
-              </div>
-              <div *ngIf="publicarForm.controls['anio'].errors?.['max']">
-                El año no puede ser mayor que el actual.
-              </div>
-            </div>
+        <!-- Marca -->
+        <div>
+          <label for="marca" class="block text-gray-700 text-sm font-bold mb-2">Marca:</label>
+          <select formControlName="marca_id" (change)="onMarcaChange()">
+            <option value="">Selecciona una marca</option>
+            <option *ngFor="let marca of marcas" [value]="marca.id">{{ marca.nombre }}</option>
+          </select>
+          
+          <div *ngIf="publicarForm.get('marca')?.touched && publicarForm.get('marca')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            La marca es requerida.
           </div>
+        </div>
 
-          <div>
-            <label for="kilometraje" class="block text-gray-700 text-sm font-bold mb-2">Kilometraje:</label>
-            <input type="number" id="kilometraje" formControlName="kilometraje" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Kilometraje del vehículo">
-            <div *ngIf="publicarForm.controls['kilometraje'].invalid && (publicarForm.controls['kilometraje'].dirty || publicarForm.controls['kilometraje'].touched)" class="text-red-500 text-xs italic mt-1">
-              <div *ngIf="publicarForm.controls['kilometraje'].errors?.['required']">
-                El kilometraje es requerido.
-              </div>
-              <div *ngIf="publicarForm.controls['kilometraje'].errors?.['min']">
-                El kilometraje no puede ser negativo.
-              </div>
-            </div>
+        <!-- Modelo -->
+        <div>
+          <label for="modelo" class="block text-gray-700 text-sm font-bold mb-2">Modelo:</label>
+          <select formControlName="modelo_id">
+            <option value="">Selecciona un modelo</option>
+            <option *ngFor="let modelo of modelos" [value]="modelo.id">{{ modelo.nombre }}</option>
+          </select>
+          
+          <div *ngIf="publicarForm.get('modelo')?.touched && publicarForm.get('modelo')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            El modelo es requerido.
           </div>
+        </div>
 
-          <div>
-            <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
-            <textarea id="descripcion" formControlName="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Descripción detallada del vehículo"></textarea>
-            <div *ngIf="publicarForm.controls['descripcion'].invalid && (publicarForm.controls['descripcion'].dirty || publicarForm.controls['descripcion'].touched)" class="text-red-500 text-xs italic mt-1">
-              <div *ngIf="publicarForm.controls['descripcion'].errors?.['required']">
-                La descripción es requerida.
-              </div>
-            </div>
+        <!-- Precio -->
+        <div>
+          <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio (€):</label>
+          <input id="precio" type="number" formControlName="precio"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+            placeholder="Precio de venta">
+          <div *ngIf="publicarForm.get('precio')?.touched && publicarForm.get('precio')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            <div *ngIf="publicarForm.get('precio')?.errors?.['required']">El precio es requerido.</div>
+            <div *ngIf="publicarForm.get('precio')?.errors?.['min']">Debe ser mayor que 0.</div>
           </div>
+        </div>
 
-          <div class="flex justify-center mt-8">
-            <button type="submit" [disabled]="publicarForm.invalid || isSubmitting" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full focus:outline-none focus:shadow-outline disabled:bg-gray-400 transition duration-300">
-              <span *ngIf="!isSubmitting">Publicar Anuncio</span>
-              <span *ngIf="isSubmitting" class="flex items-center">
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Publicando...
-              </span>
-            </button>
+        <!-- Año -->
+        <div>
+          <label for="anio" class="block text-gray-700 text-sm font-bold mb-2">Año de Fabricación:</label>
+          <input id="anio" type="number" formControlName="anio"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+            placeholder="Año de fabricación">
+          <div *ngIf="publicarForm.get('anio')?.touched && publicarForm.get('anio')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            <div *ngIf="publicarForm.get('anio')?.errors?.['required']">El año es requerido.</div>
+            <div *ngIf="publicarForm.get('anio')?.errors?.['min']">Mínimo 1900.</div>
+            <div *ngIf="publicarForm.get('anio')?.errors?.['max']">No puede ser mayor que el actual.</div>
           </div>
-        </form>
-      </div>
-    </section>
-  </div>
+        </div>
+
+        <!-- Kilometraje -->
+        <div>
+          <label for="kilometraje" class="block text-gray-700 text-sm font-bold mb-2">Kilometraje:</label>
+          <input id="kilometraje" type="number" formControlName="kilometraje"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+            placeholder="Kilómetros recorridos">
+          <div *ngIf="publicarForm.get('kilometraje')?.touched && publicarForm.get('kilometraje')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            <div *ngIf="publicarForm.get('kilometraje')?.errors?.['required']">El kilometraje es requerido.</div>
+            <div *ngIf="publicarForm.get('kilometraje')?.errors?.['min']">No puede ser negativo.</div>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div>
+          <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
+          <textarea id="descripcion" rows="4" formControlName="descripcion"
+            class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+            placeholder="Descripción detallada del vehículo"></textarea>
+          <div *ngIf="publicarForm.get('descripcion')?.touched && publicarForm.get('descripcion')?.invalid"
+            class="text-red-500 text-xs italic mt-1">
+            La descripción es requerida.
+          </div>
+        </div>
+
+        <!-- Imagen principal -->
+        <div>
+          <label for="imagen_principal" class="block text-gray-700 text-sm font-bold mb-2">Imagen Principal:</label>
+          <input type="file" id="imagen_principal" (change)="onPrincipalImageSelected($event)" accept="image/*"
+            class="block w-full text-sm text-gray-700 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        </div>
+
+        <!-- Imágenes adicionales -->
+        <div>
+          <label for="imagenes_adicionales" class="block text-gray-700 text-sm font-bold mb-2">Imágenes Adicionales:</label>
+          <input type="file" id="imagenes_adicionales" (change)="onAdicionalImagesSelected($event)" multiple accept="image/*"
+            class="block w-full text-sm text-gray-700 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        </div>
+
+        <!-- Botón -->
+        <div class="flex justify-center mt-8">
+          <button type="submit" [disabled]="publicarForm.invalid || isSubmitting"
+            class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full focus:outline-none focus:shadow-outline disabled:bg-gray-400 transition duration-300">
+            <span *ngIf="!isSubmitting">Publicar Anuncio</span>
+            <span *ngIf="isSubmitting" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Publicando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
 
   <app-footer></app-footer>
 </div>

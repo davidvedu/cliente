@@ -32,7 +32,7 @@ export class LoginComponent {
 
     this.cargando = true;
     this.error = '';
-
+    
     this.http.post<any>('http://localhost:3000/api/sesion/login', this.credenciales).subscribe({
       next: (res) => {
         // En tu método de login, después de recibir la respuesta:
@@ -42,7 +42,8 @@ export class LoginComponent {
         this.router.navigate(['/anuncios']);
       },
       error: (err) => {
-        this.error = err.error?.error || 'Error al iniciar sesión';
+        console.error('Error completo:', err);
+        this.error = err.error?.error || 'Error al iniciar sesión. Código: ' + err.status;
         this.cargando = false;
       }
     });
